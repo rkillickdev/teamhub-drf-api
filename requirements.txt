@@ -13,7 +13,8 @@ djangorestframework_simplejwt==5.4.0
 djoser==2.2.0
 idna==3.10
 oauthlib==3.2.2
-psycopg2==2.9.6
+psycopg==3.2.4
+psycopg-binary==3.2.4
 pycparser==2.22
 PyJWT==2.10.1
 python-dotenv==1.0.0
