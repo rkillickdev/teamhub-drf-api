@@ -28,3 +28,7 @@ class TeamViewSet(viewsets.ModelViewSet):
             return serializers.TeamSerializer
 
         return self.serializer_class
+
+    def perform_create(self, serializer):
+        """Create a new team."""
+        serializer.save(user=self.request.user)
