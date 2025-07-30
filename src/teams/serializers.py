@@ -4,7 +4,7 @@ Serializers for teams APIs
 
 from rest_framework import serializers
 
-from models import Team
+from teams.models import Team
 
 
 class TeamSerializer(serializers.ModelSerializer):
