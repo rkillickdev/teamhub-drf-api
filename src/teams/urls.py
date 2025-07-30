@@ -13,6 +13,7 @@ from teams import views
 
 router = DefaultRouter()
 router.register("teams", views.TeamViewSet)
+router.register("players", views.PlayerViewSet)
 
 app_name = "teams"
 
