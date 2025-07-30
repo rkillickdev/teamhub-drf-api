@@ -13,7 +13,7 @@ from teams import serializers
 class TeamViewSet(viewsets.ModelViewSet):
     """View for manage teams APIs."""
 
-    serializer_class = serializers.TeamSerializer
+    serializer_class = serializers.TeamDetailSerializer
     queryset = Team.objects.all()
     # authentication_classes = [CustomJWTAuthentication]
     # permission_classes = [IsAuthenticated]
@@ -21,3 +21,10 @@ class TeamViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Retrieve teams for authenticated user."""
         return self.queryset.filter(user=self.request.user).order_by("-id")
+
+    def get_serializer_class(self):
+        """Return the serializer class for request"."""
+        if self.action == "list":
+            return serializers.TeamSerializer
+
+        return self.serializer_class

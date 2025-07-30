@@ -15,8 +15,14 @@ class TeamSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "manager",
             "created_at",
             "updated_at",
         ]
         read_only_fields = ["id"]
+
+
+class TeamDetailSerializer(TeamSerializer):
+    """Serializer for teams detail view."""
+
+    class Meta(TeamSerializer.Meta):
+        fields = TeamSerializer.Meta.fields + ["manager"]
