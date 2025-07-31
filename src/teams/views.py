@@ -37,6 +37,7 @@ class TeamViewSet(viewsets.ModelViewSet):
 class PlayerViewSet(
     mixins.DestroyModelMixin,
     mixins.UpdateModelMixin,
+    mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):

@@ -36,10 +36,8 @@ class TeamSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id"]
 
-    def create(self, validated_data):
-        """Create a player."""
-        players = validated_data.pop("players", [])
-        team = Team.objects.create(**validated_data)
+    def _get_or_create_players(self, players, team):
+        """Handle getting or creating players as needed."""
         auth_user = self.context["request"].user
         for player in players:
             player_obj, created = Player.objects.get_or_create(
@@ -48,7 +46,26 @@ class TeamSerializer(serializers.ModelSerializer):
             )
             team.players.add(player_obj)
 
+    def create(self, validated_data):
+        """Create a team."""
+        players = validated_data.pop("players", [])
+        team = Team.objects.create(**validated_data)
+        self._get_or_create_players(players, team)
+
         return team
+
+    def update(self, instance, validated_data):
+        """Update a team"""
+        players = validated_data.pop("players", None)
+        if players is not None:
+            instance.players.clear()
+            self._get_or_create_players(players, instance)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
 
 
 class TeamDetailSerializer(TeamSerializer):
