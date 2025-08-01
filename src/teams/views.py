@@ -2,6 +2,7 @@
 views for the teams APIs.
 """
 
+from django.db.models import Count, Q
 from rest_framework import viewsets, mixins
 from users.authentication import CustomJWTAuthentication
 from rest_framework.permissions import IsAuthenticated

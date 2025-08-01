@@ -23,16 +23,29 @@ class PlayerSerializer(serializers.ModelSerializer):
 class TeamSerializer(serializers.ModelSerializer):
     """Serializer for teams."""
 
+    owner = serializers.ReadOnlyField(source="user.first_name")
+    is_owner = serializers.SerializerMethodField()
     players = PlayerSerializer(many=True, required=False)
+    player_count = serializers.SerializerMethodField()
+
+    def get_is_owner(self, obj):
+        request = self.context["request"]
+        return request.user == obj.user
+
+    def get_player_count(self, obj):
+        return obj.players.count()
 
     class Meta:
         model = Team
         fields = [
             "id",
+            "owner",
+            "is_owner",
             "name",
             "created_at",
             "updated_at",
             "players",
+            "player_count",
         ]
         read_only_fields = ["id"]
 
