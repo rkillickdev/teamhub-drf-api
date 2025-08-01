@@ -14,6 +14,7 @@ from teams import views
 router = DefaultRouter()
 router.register("teams", views.TeamViewSet)
 router.register("players", views.PlayerViewSet)
+router.register("matches", views.MatchViewSet)
 
 app_name = "teams"
 

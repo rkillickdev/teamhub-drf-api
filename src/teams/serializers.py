@@ -4,7 +4,7 @@ Serializers for teams APIs
 
 from rest_framework import serializers
 
-from .models import Team, Player
+from .models import Team, Player, Match, Opponent
 
 
 class PlayerSerializer(serializers.ModelSerializer):
@@ -42,8 +42,6 @@ class TeamSerializer(serializers.ModelSerializer):
             "owner",
             "is_owner",
             "name",
-            "created_at",
-            "updated_at",
             "players",
             "player_count",
         ]
@@ -86,3 +84,32 @@ class TeamDetailSerializer(TeamSerializer):
 
     class Meta(TeamSerializer.Meta):
         fields = TeamSerializer.Meta.fields + ["manager"]
+
+
+class OpponentSerializer(serializers.ModelSerializer):
+    """Serializer for opponents."""
+
+    class Meta:
+        model = Opponent
+        fields = ["name"]
+
+
+class MatchSerializer(serializers.ModelSerializer):
+    """Serialzer for matches."""
+
+    team = TeamSerializer()
+    opponent = OpponentSerializer()
+
+    class Meta:
+        model = Match
+        fields = [
+            "id",
+            "team",
+            "opponent",
+            "match_type",
+            "date",
+            "team_score",
+            "opponent_score",
+            "match_complete",
+        ]
+        read_only_fields = ["id"]

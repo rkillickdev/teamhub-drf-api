@@ -74,6 +74,7 @@ class Match(models.Model):
     date = models.DateTimeField()
     team_score = models.PositiveIntegerField(default=0)
     opponent_score = models.PositiveIntegerField(default=0)
+    match_complete = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

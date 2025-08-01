@@ -7,7 +7,7 @@ from rest_framework import viewsets, mixins
 from users.authentication import CustomJWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Team, Player
+from .models import Team, Player, Match, Opponent
 from teams import serializers
 
 
@@ -54,3 +54,23 @@ class PlayerViewSet(
         return self.queryset.filter(user=self.request.user).order_by(
             "-last_name"
         )
+
+
+class MatchViewSet(viewsets.ModelViewSet):
+    """Manage matches in the database"""
+
+    serializer_class = serializers.MatchSerializer
+    queryset = Match.objects.all()
+
+    def get_queryset(self):
+        """Filter queryset to matches related to teams owned by the authenticated user."""
+        return self.queryset.filter(team__user=self.request.user).order_by(
+            "date"
+        )
+
+
+class OpponentViewSet(viewsets.ModelViewSet):
+    "Manage opponents."
+
+    serializer_class = serializers.OpponentSerializer
+    queryset = Opponent.objects.all()
