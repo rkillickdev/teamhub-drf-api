@@ -1,7 +1,3 @@
-"""
-Serializers for teams APIs
-"""
-
 from rest_framework import serializers
 
 from .models import League, Team, Player, Match
