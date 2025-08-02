@@ -7,8 +7,26 @@ from rest_framework import viewsets, mixins
 from users.authentication import CustomJWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Team, Player, Match, Opponent
+from .models import League, Team, Player, Match
 from teams import serializers
+from app.permissions import IsStaffUser, IsOwnerOrReadOnly
+
+
+class LeagueViewSet(viewsets.ModelViewSet):
+    """View for manage leagues APIs."""
+
+    serializer_class = serializers.LeagueSerializer
+    queryset = League.objects.all()
+    permission_classes = [IsStaffUser]
+
+    def get_queryset(self):
+        """Filter leagues to match the age_group and category of teams owned by the authenticated user."""
+        user_teams = Team.objects.filter(user=self.request.user)
+        age_groups = user_teams.values_list("age_group", flat=True)
+        categories = user_teams.values_list("category", flat=True)
+        return self.queryset.filter(
+            age_group__in=age_groups, category__in=categories
+        )
 
 
 class TeamViewSet(viewsets.ModelViewSet):
@@ -16,8 +34,7 @@ class TeamViewSet(viewsets.ModelViewSet):
 
     serializer_class = serializers.TeamDetailSerializer
     queryset = Team.objects.all()
-    # authentication_classes = [CustomJWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated and IsOwnerOrReadOnly]
 
     def get_queryset(self):
         """Retrieve teams for authenticated user."""
@@ -67,10 +84,3 @@ class MatchViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(team__user=self.request.user).order_by(
             "date"
         )
-
-
-class OpponentViewSet(viewsets.ModelViewSet):
-    "Manage opponents."
-
-    serializer_class = serializers.OpponentSerializer
-    queryset = Opponent.objects.all()

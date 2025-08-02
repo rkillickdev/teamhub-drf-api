@@ -4,7 +4,20 @@ Serializers for teams APIs
 
 from rest_framework import serializers
 
-from .models import Team, Player, Match, Opponent
+from .models import League, Team, Player, Match
+
+
+class LeagueSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = League
+        fields = [
+            "id",
+            "name",
+            "age_group",
+            "category",
+        ]
+        read_only_fields = ["id"]
 
 
 class PlayerSerializer(serializers.ModelSerializer):
@@ -86,19 +99,10 @@ class TeamDetailSerializer(TeamSerializer):
         fields = TeamSerializer.Meta.fields + ["manager"]
 
 
-class OpponentSerializer(serializers.ModelSerializer):
-    """Serializer for opponents."""
-
-    class Meta:
-        model = Opponent
-        fields = ["name"]
-
-
 class MatchSerializer(serializers.ModelSerializer):
     """Serialzer for matches."""
 
     team = TeamSerializer()
-    opponent = OpponentSerializer()
 
     class Meta:
         model = Match

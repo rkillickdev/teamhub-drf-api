@@ -12,6 +12,7 @@ from rest_framework.routers import DefaultRouter
 from teams import views
 
 router = DefaultRouter()
+router.register("leagues", views.LeagueViewSet)
 router.register("teams", views.TeamViewSet)
 router.register("players", views.PlayerViewSet)
 router.register("matches", views.MatchViewSet)
