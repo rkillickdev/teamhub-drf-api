@@ -19,12 +19,15 @@ class LeagueSerializer(serializers.ModelSerializer):
 class PlayerSerializer(serializers.ModelSerializer):
     """Serializer for players."""
 
+    teams = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Player
         fields = [
             "id",
             "first_name",
             "last_name",
+            "teams",
         ]
         read_only_fields = ["id"]
 

@@ -67,8 +67,8 @@ class PlayerViewSet(
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        """Filter queryset to authenticated user."""
-        return self.queryset.filter(user=self.request.user).order_by(
+        """Filter queryset to players linked to teams owned by the authenticated user."""
+        return self.queryset.filter(team__user=self.request.user).order_by(
             "-last_name"
         )
 
